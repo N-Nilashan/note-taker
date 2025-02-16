@@ -20,9 +20,9 @@ const Hero = () => {
         <Button className='px-6 py-6 dark:bg-dbtn bg-primary rounded-full text-bold text-secondary hover:bg-foreground dark:hover:bg-primary'>See Features</Button>
       </div>
       <div>
-        <h1 className='text-[70px] text-center text-slate-500'>Demo Pic</h1>
+        <h1 className='text-[70px] text-center text-slate-500'>Demo Pic Here</h1>
       </div>
-      
+
     </div>
   )
 }
