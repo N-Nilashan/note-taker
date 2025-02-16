@@ -7,7 +7,7 @@ const Hero = () => {
   return (
     <div >
       <div className='flex items-center justify-center'>
-        <div>
+        <div className='py-9 w-[500px] h-[400px]'>
           <PenModel/>
         </div>
       </div>
