@@ -1,6 +1,7 @@
 import Feature from "@/components/Feature";
 import Hero from "@/pages/Hero";
-import Navbar from "@/pages/Navbar";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <Navbar/>
       <Hero/>
       <Feature/>
+      <Footer/>
     </div>
   );
 }

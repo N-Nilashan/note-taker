@@ -11,12 +11,12 @@ const PenModel = () => {
         fov: 45
       }}
     >
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={1.5} />
       <spotLight position={[10, 10, 10]} angle={0.15} />
       <primitive
         object={scene}
         scale={2}
-        rotation={[Math.PI, 0, Math.PI*2.8 / 4 ]}  // Added Math.PI (180 degrees) rotation on X-axis
+        rotation={[Math.PI, 0, Math.PI*2.8 / 4 ]}
         position={[0, 0, 0]}
       />
       <OrbitControls

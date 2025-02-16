@@ -22,9 +22,7 @@ const Hero = () => {
       <div>
         <h1 className='text-[70px] text-center text-slate-500'>Demo Pic</h1>
       </div>
-      <div>
-        <h2 className='text-primary font-bold dark:text-secondary text-[40px] text-center'>Key Features of AI-Notes App</h2>
-      </div>
+      
     </div>
   )
 }

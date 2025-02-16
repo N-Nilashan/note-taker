@@ -1,5 +1,6 @@
 import { NotebookPen, CheckCircle, Star, Folder, Search, Lock, Edit } from 'lucide-react'
 import React from 'react'
+import { Button } from './ui/button';
 
 const Feature = () => {
   // Define iconComponents inside the component
@@ -53,25 +54,34 @@ const Feature = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-      {featureList.map((feature) => {
-        const IconComponent = iconComponents[feature.icon];
-        return (
-          <div
-            key={feature.id}
-            className="block p-6 bg-white border border-gray-200 rounded-3xl shadow-sm hover:bg-gray-100 dark:bg-bgDark dark:border-emerald-900/20 dark:hover:bg-emerald-900/20"
-          >
-            <h5 className="mb-2 flex items-center gap-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-              {IconComponent && <IconComponent />}
-              {feature.title}
-            </h5>
-            <p className="font-normal text-gray-700 dark:text-gray-400">
-              {feature.des}
-            </p>
-          </div>
-        );
-      })}
-    </div>
+    <>
+      <div>
+        <h2 className='text-primary font-bold dark:text-secondary text-[40px] text-center'>Key Features of AI-Notes App</h2>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+        {featureList.map((feature) => {
+          const IconComponent = iconComponents[feature.icon];
+          return (
+            <div
+              key={feature.id}
+              className="block p-6 bg-white border border-gray-200 rounded-3xl shadow-sm hover:bg-gray-100 dark:bg-bgDark dark:border-emerald-900/20 dark:hover:bg-emerald-900/20"
+            >
+              <h5 className="mb-2 flex items-center gap-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {IconComponent && <IconComponent />}
+                {feature.title}
+              </h5>
+              <p className="font-normal text-gray-700 dark:text-gray-400">
+                {feature.des}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+      <div  className='text-primary dark:text-secondary font-bold text-center'>
+       <h1 className='text-[40px]'>Start Using AI Notes Today</h1>
+       <Button className='mt-7 px-6 py-6 dark:bg-dbtn bg-primary rounded-full text-bold text-secondary hover:bg-foreground dark:hover:bg-primary'>Get Started</Button>
+      </div>
+    </>
   )
 }
 
