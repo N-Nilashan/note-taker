@@ -1,5 +1,11 @@
 import "./globals.css";
-
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from '@clerk/nextjs'
 
 
 export const metadata = {
@@ -9,12 +15,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className='font-myfont'
-      >
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className='font-myfont'
+        >
+          {children}
+
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

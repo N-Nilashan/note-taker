@@ -1,6 +1,6 @@
 import { NotebookPen, CheckCircle, Star, Folder, Search, Lock, Edit } from 'lucide-react'
 import React from 'react'
-import { Button } from './ui/button';
+import { Button } from '../../components/ui/button';
 
 const Feature = () => {
   // Define iconComponents inside the component

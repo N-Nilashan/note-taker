@@ -1,4 +1,4 @@
-import PenModel from '@/components/PenModel'
+import PenModel from '@/app/_components/PenModel'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import React from 'react'

@@ -1,11 +1,21 @@
-import Navbar from '@/components/Navbar'
-import React from 'react'
+
+import { UserButton } from '@clerk/nextjs';
+import Navbar from '../_components/Navbar';
 
 const page = () => {
   return (
-    <div>
-      <Navbar/>
-    </div>
+   <>
+      <div>
+      <Navbar
+        customButton={
+          <UserButton showName />
+        }
+      />
+      </div>
+      <div>
+          
+      </div>
+    </>
   )
 }
 

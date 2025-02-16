@@ -1,7 +1,7 @@
-import Feature from "@/components/Feature";
-import Hero from "@/pages/Hero";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Feature from "@/app/_components/Feature";
+import Hero from "@/app/_components/Hero";
+import Navbar from "@/app/_components/Navbar";
+import Footer from "@/app/_components/Footer";
 
 export default function Home() {
   return (

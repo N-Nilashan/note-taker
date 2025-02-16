@@ -10,9 +10,11 @@
   },
   "type": "module",
   "dependencies": {
+    "@clerk/nextjs": "^6.11.3",
     "@radix-ui/react-slot": "^1.1.2",
     "@react-three/drei": "^9.121.5",
     "@react-three/fiber": "^8.17.14",
+    "@tailwindcss/forms": "^0.5.10",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.475.0",

@@ -36,3 +36,7 @@
 }
 
 
+/* For Tailwind, target the same class */
+.cl-userButtonOuterIdentifier {
+  @apply text-secondary !important;
+}
