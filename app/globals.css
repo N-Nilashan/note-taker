@@ -6,6 +6,7 @@
   /* Light mode background color */
   body {
     background-color: #f3f4f6; /* Light background */
+    font-family: 'MyFont', sans-serif !important;
   }
 
   /* Dark mode background color */
@@ -13,4 +14,25 @@
     background-color: #121212  ; /* Dark background, your primary color */
   }
 }
+@font-face {
+  font-family: 'MyFont';
+  src: url('/fonts/Sentient-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MyFont';
+  src: url('/fonts/Sentient-Medium.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MyFont';
+  src: url('/fonts/Sentient-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
 

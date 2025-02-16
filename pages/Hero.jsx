@@ -5,14 +5,14 @@ import React from 'react'
 
 const Hero = () => {
   return (
-    <div >
+    <div>
       <div className='flex items-center justify-center'>
         <div className='py-9 w-[500px] h-[400px]'>
           <PenModel/>
         </div>
       </div>
       <div className='text-primary dark:text-secondary font-bold text-center'>
-        <h1 className='text-[70px]'>Take Smarter Notes with AI</h1>
+        <h1 className=' text-[70px]'>Take Smarter Notes with AI</h1>
         <h2 className='text-[30px] text-foreground'>Write, Organise, and Summarize notes instantly with AI assistance</h2>
       </div>
       <div className='flex items-center justify-center gap-6 mt-7'>

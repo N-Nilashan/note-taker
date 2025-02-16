@@ -8,6 +8,9 @@ export default {
   ],
   theme: {
    	extend: {
+			fontFamily: {
+        myfont: ['MyFont', 'sans-serif'],
+      },
    		colors: {
    			primary: '#1A3D23',
 				foreground: '#4CAF50',

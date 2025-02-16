@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <div className={`bg-backgroundLight dark:bg-bgDark transition-all duration-300`}>
+    <div className={`bg-backgroundLight dark:bg-bgDark transition-all  duration-300`}>
       <Navbar/>
       <Hero/>
       <Feature/>
