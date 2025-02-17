@@ -1,6 +1,7 @@
 import { NotebookPen, CheckCircle, Star, Folder, Search, Lock, Edit } from 'lucide-react'
 import React from 'react'
 import { Button } from '../../components/ui/button';
+import Link from 'next/link';
 
 const Feature = () => {
   // Define iconComponents inside the component
@@ -79,7 +80,9 @@ const Feature = () => {
       </div>
       <div  className='text-primary dark:text-secondary font-bold text-center'>
        <h1 className='text-[40px]'>Start Using AI Notes Today</h1>
+       <Link href="/sign-up">
        <Button className='mt-7 px-6 py-6 dark:bg-dbtn bg-primary rounded-full text-bold text-secondary hover:bg-foreground dark:hover:bg-primary'>Get Started</Button>
+       </Link>
       </div>
     </>
   )

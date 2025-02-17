@@ -1,6 +1,8 @@
+'use client'
 import { SignIn } from "@clerk/nextjs"
-
+import { useEffect } from "react";
 const page = () => {
+  
   return (
 
     <section className="bg-white">

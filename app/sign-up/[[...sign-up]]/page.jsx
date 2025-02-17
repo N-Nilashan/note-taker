@@ -1,6 +1,7 @@
 import { SignUp } from "@clerk/nextjs"
 
 const page = () => {
+
   return (
 
     <section className="bg-white">

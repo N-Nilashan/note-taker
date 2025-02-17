@@ -11,6 +11,7 @@ import {
 export const metadata = {
   title: "AI-Notes App",
   description: "Your Personal AI Note Taker",
+  icons:'/logo3.svg'
 };
 
 export default function RootLayout({ children }) {
