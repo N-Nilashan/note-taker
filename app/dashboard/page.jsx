@@ -14,6 +14,7 @@ const page = () => {
     setNotes([...notes,newNote]); // Add new note to the list
   }
 
+
   return (
    <>
       <div>
@@ -55,7 +56,7 @@ const page = () => {
       </div>
       <div className='p-10  grid grid-cols-3'>
         {notes.map((note,index)=>(
-          <TextCard key={index} title={note.title} content={note.content}/>
+          <TextCard key={index} title={note.title} content={note.content} />
         ))}
       </div>
     </>
