@@ -1,10 +1,21 @@
+'use client'
 import PenModel from '@/app/_components/PenModel'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import { useRouter } from 'next/navigation'
 
 const Hero = () => {
+  const router = useRouter();
+
+  const handleRedirect = () => {
+    router.push('/sign-up')
+    setTimeout(() => {
+      window.location.reload(); // Reload after navigation
+    }, 100); // Small delay to ensure navigation occurs first
+  };
+
   return (
     <div>
       <div className='flex items-center justify-center'>
@@ -17,9 +28,9 @@ const Hero = () => {
         <h2 className='text-[30px] text-foreground'>Write, Organise, and Summarize notes instantly with AI assistance</h2>
       </div>
       <div className='flex items-center justify-center gap-6 mt-7'>
-        <Link href="/sign-up">
-        <Button className='px-6 py-6 dark:bg-dbtn bg-primary rounded-full text-bold text-secondary hover:bg-foreground dark:hover:bg-primary'>Get Started</Button>
-        </Link>
+
+        <Button  onClick={handleRedirect} className='px-6 py-6 dark:bg-dbtn bg-primary rounded-full text-bold text-secondary hover:bg-foreground dark:hover:bg-primary'>Get Started</Button>
+
         <Button className='px-6 py-6 dark:bg-dbtn bg-primary rounded-full text-bold text-secondary hover:bg-foreground dark:hover:bg-primary'>See Features</Button>
 
       </div>

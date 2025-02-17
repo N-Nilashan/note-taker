@@ -1,9 +1,19 @@
+'use client'
 import { NotebookPen, CheckCircle, Star, Folder, Search, Lock, Edit } from 'lucide-react'
 import React from 'react'
 import { Button } from '../../components/ui/button';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation'
 
 const Feature = () => {
+  const router = useRouter();
+
+  const handleRedirect = () => {
+    router.push('/sign-up')
+    setTimeout(() => {
+      window.location.reload(); // Reload after navigation
+    }, 100); // Small delay to ensure navigation occurs first
+  };
   // Define iconComponents inside the component
   const iconComponents = {
     'check-circle': CheckCircle,
@@ -81,7 +91,7 @@ const Feature = () => {
       <div  className='text-primary dark:text-secondary font-bold text-center'>
        <h1 className='text-[40px]'>Start Using AI Notes Today</h1>
        <Link href="/sign-up">
-       <Button className='mt-7 px-6 py-6 dark:bg-dbtn bg-primary rounded-full text-bold text-secondary hover:bg-foreground dark:hover:bg-primary'>Get Started</Button>
+       <Button onClick={handleRedirect} className='mt-7 px-6 py-6 dark:bg-dbtn bg-primary rounded-full text-bold text-secondary hover:bg-foreground dark:hover:bg-primary' >Get Started</Button>
        </Link>
       </div>
     </>

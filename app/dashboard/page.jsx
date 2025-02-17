@@ -8,6 +8,12 @@ import CreateNote from '../_components/CreateNote';
 
 const page = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [notes, setNotes] = useState([]);
+
+  const addNote = (newNote)=>{
+    setNotes([...notes,newNote]); // Add new note to the list
+  }
+
   return (
    <>
       <div>
@@ -21,9 +27,9 @@ const page = () => {
         <div>
           <button  className="bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4"
               onClick={() => setIsOpen(true)}>
-              <Pencil/>Create Note
+              <Pencil/>Add Note
             </button>
-            <CreateNote isOpen={isOpen} onClose={() => setIsOpen(false)}/>
+            <CreateNote isOpen={isOpen} onClose={() => setIsOpen(false)} addNote={addNote}/>
         </div>
 
           <button className='bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4'>
@@ -48,9 +54,9 @@ const page = () => {
         </button>
       </div>
       <div className='p-10  grid grid-cols-3'>
-        <TextCard/>
-        <TextCard/>
-        <TextCard/>
+        {notes.map((note,index)=>(
+          <TextCard key={index} title={note.title} content={note.content}/>
+        ))}
       </div>
     </>
   )

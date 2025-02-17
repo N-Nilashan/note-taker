@@ -3,8 +3,19 @@ import DarkModeToggle from '@/app/_components/DarkModeToggle'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 const Navbar = ({ customButton }) => {
+
+  const router = useRouter();
+
+  const handleRedirect = () => {
+    router.push('/sign-up')
+    setTimeout(() => {
+      window.location.reload(); // Reload after navigation
+    }, 100); // Small delay to ensure navigation occurs first
+  };
+
   return (
     <div className='bg-primary w-full h-[70px]'>
       <div className='flex justify-between font-bold text-[20px]'>
@@ -21,16 +32,18 @@ const Navbar = ({ customButton }) => {
         <span className='flex items-center -mt-[25px] px-7'>
           <DarkModeToggle />
           {customButton ? customButton : (
-            <Link href="/sign-up">
-              <Button className='mt-1 font-bold text-[20px] bg-primary hover:bg-foreground px-7'>
+
+              <Button  onClick={handleRedirect}  className='mt-1 font-bold text-[20px] bg-primary hover:bg-foreground px-7'>
                 Get Started
               </Button>
-            </Link>
+
+
           )}
         </span>
       </div>
     </div>
   )
 }
+
 
 export default Navbar;
