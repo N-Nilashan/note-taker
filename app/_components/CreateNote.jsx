@@ -29,9 +29,9 @@ export default function CreateNote({ isOpen, onClose,addNote  }) {
          </span>
           <div className="flex justify-between items-center mb-2">
 
-          <div class="mb-6">
+          <div className="mb-6">
 
-                <label for="default-input" class="block mb-2 text-sm font-medium text-secondary dark:text-white">Title</label>
+                <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-secondary dark:text-white">Title</label>
 
 
 
@@ -41,16 +41,16 @@ export default function CreateNote({ isOpen, onClose,addNote  }) {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[410px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               value={title}
               onChange={(e)=>setTitle(e.target.value)}
-              >
+              />
 
-              </input>
+
 
           </div>
 
           </div>
           <p className="text-md font-medium mb-2">Select category</p>
 
-          <label for="message" class="block mb-2 text-sm font-medium text-secondary dark:text-white">Your Note</label>
+          <label htmlFor="message" className="block mb-2 text-sm font-medium text-secondary dark:text-white">Your Note</label>
           <textarea
           id="message"
           rows="4"

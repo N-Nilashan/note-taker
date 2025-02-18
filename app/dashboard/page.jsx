@@ -9,6 +9,9 @@ import CreateNote from '../_components/CreateNote';
 const page = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [notes, setNotes] = useState([]);
+  const deleteNote = (indexToDelete)=>{
+    setNotes(notes.filter((_,index)=> index !== indexToDelete));
+  };
 
   const addNote = (newNote)=>{
     setNotes([...notes,newNote]); // Add new note to the list
@@ -56,7 +59,12 @@ const page = () => {
       </div>
       <div className='p-10  grid grid-cols-3'>
         {notes.map((note,index)=>(
-          <TextCard key={index} title={note.title} content={note.content} />
+          <TextCard
+          key={index}
+          title={note.title}
+          content={note.content}
+          onDelete = {()=>deleteNote( index)}
+          />
         ))}
       </div>
     </>
