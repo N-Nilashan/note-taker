@@ -1,28 +1,28 @@
 'use client'
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const TextCard = ({  title, content,onDelete  }) => {
-  const [summary,setSummary] = useState("")
+  const [summary, setSummary] = useState('');
 
-  const handleSummarize = async ()=>{
+  const handleSummarize = async () => {
+
+
     try {
-      const response = await fetch ("/api/summarize",{
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: content }),
-      })
+      const response = await fetch('/api/summarize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content }),
+      });
+
       const data = await response.json();
-      if (response.ok) {
-        setSummary(data.summary);
-      } else {
-        console.error("Error summarizing:", data.message);
-      }
-    } catch (error) {
-      console.error("Error:", error);
+
+      if (!response.ok) throw new Error(data.error || 'Failed to summarize');
+      setSummary(data.summary);
+    } catch (err) {
+      console.log(err.message);
     }
+
   };
-
-
   return (
     <div className="relative dark:bg-black w-96 bg-white shadow-sm border border-emerald-400 rounded-3xl p-3 pb-6">
       <div className="justify-start mb-3 px-2">
@@ -40,6 +40,8 @@ const TextCard = ({  title, content,onDelete  }) => {
         </button>
         <button
         onClick={handleSummarize}
+        // disabled={loading || !text.trim()}
+
         className='rounded-3xl w-[120px] p-2 text-secondary bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary'>
           Summarize
         </button>
