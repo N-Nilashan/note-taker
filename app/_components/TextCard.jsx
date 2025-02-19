@@ -6,6 +6,8 @@ const TextCard = ({ title, content, onDelete }) => {
   const [summary, setSummary] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const [summarized,setSummarized] = useState(false)
+
   const handleSummarize = async () => {
     setLoading(true);
     try {
@@ -22,6 +24,7 @@ const TextCard = ({ title, content, onDelete }) => {
       console.log(err.message);
     } finally {
       setLoading(false);
+      setSummarized(true)
     }
   };
 
@@ -49,8 +52,8 @@ const TextCard = ({ title, content, onDelete }) => {
         </button>
         <button
           onClick={handleSummarize}
-          disabled={loading}
-          className='rounded-3xl w-[120px] p-2 text-secondary bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary'
+          disabled={loading || summarized}
+          className={`rounded-3xl w-[120px] p-2 text-secondary bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary ${loading || summarized ? 'cursor-not-allowed' : 'cursor-pointer'}`}
         >
           {loading ? <Loader2 className="animate-spin inline-block" size={16} /> : 'Summarize'}
         </button>
