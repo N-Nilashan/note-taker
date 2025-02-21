@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
-const TextCard = ({ title, content, onDelete }) => {
+const TextCard = ({ title, content, onDelete,onEdit }) => {
   const [summary, setSummary] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -47,7 +47,9 @@ const TextCard = ({ title, content, onDelete }) => {
         )}
       </div>
       <div className='flex mt-3 items-center justify-evenly font-semibold'>
-        <button className='rounded-3xl w-[70px] p-2 text-secondary bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary'>
+        <button
+        onClick={onEdit}
+        className='rounded-3xl w-[70px] p-2 text-secondary bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary'>
           Edit
         </button>
         <button

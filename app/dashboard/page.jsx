@@ -9,66 +9,86 @@ import CreateNote from '../_components/CreateNote';
 const page = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [notes, setNotes] = useState([]);
-  const deleteNote = (indexToDelete)=>{
-    setNotes(notes.filter((_,index)=> index !== indexToDelete));
+  const [currentNote, setCurrentNote] = useState(null);
+
+  const deleteNote = (indexToDelete) => {
+    setNotes(notes.filter((_, index) => index !== indexToDelete));
   };
 
-  const addNote = (newNote)=>{
-    setNotes([...notes,newNote]); // Add new note to the list
-  }
+  const addNote = (newNote) => {
+    setNotes([...notes, {id: Date.now(), ...newNote}]);
+  };
 
+  // New function to handle editing a note
+  const editNote = (note, index) => {
+    setCurrentNote({...note, index});
+    setIsOpen(true);
+  };
+
+  // New function to handle updating a note
+  const updateNote = (updatedNote, index) => {
+    const updatedNotes = [...notes];
+    updatedNotes[index] = {...updatedNotes[index], ...updatedNote};
+    setNotes(updatedNotes);
+  };
+
+  // Function to handle closing the modal and resetting currentNote
+  const handleCloseModal = () => {
+    setIsOpen(false);
+    setCurrentNote(null);
+  };
 
   return (
-   <>
+    <>
       <div>
-      <Navbar
-        customButton={
-          <UserButton showName />
-        }
-      />
+        <Navbar customButton={<UserButton showName />} />
       </div>
-      <div className='flex  items-center justify-center gap-6 p-5'>
+
+      <div className='flex items-center justify-center gap-6 p-5'>
         <div>
-          <button  className="bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4"
-              onClick={() => setIsOpen(true)}>
-              <Pencil/>Add Note
-            </button>
-            <CreateNote isOpen={isOpen} onClose={() => setIsOpen(false)} addNote={addNote}/>
+          <button
+            className="bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4"
+            onClick={() => setIsOpen(true)}
+          >
+            <Pencil/>Add Note
+          </button>
+          <CreateNote
+            isOpen={isOpen}
+            onClose={handleCloseModal}
+            addNote={addNote}
+            currentNote={currentNote}
+            updateNote={updateNote}
+          />
         </div>
 
-          <button className='bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4'>
-            <Pin/>Pinned Notes
-          </button>
-          <button className='bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4'>
-            <Search/>Search Notes
-          </button>
-      </div>
-      <div className='flex items-center justify-center gap-6 '>
-        <button className='rounded-3xl p-3 w-[100px] bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-semibold'>
-          All
+        {/* Other buttons */}
+        <button className='bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4'>
+          <Pin/>Pinned Notes
         </button>
-        <button className='rounded-3xl p-3 w-[100px] bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-semibold'>
-          Work
-        </button>
-        <button className='rounded-3xl p-3 w-[100px] bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-semibold'>
-          Study
-        </button>
-        <button className='rounded-3xl p-3 flex items-center justify-center w-[180px] bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-semibold'>
-         <Plus/> Create Category
+        <button className='bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4'>
+          <Search/>Search Notes
         </button>
       </div>
-      <div className='p-10  grid grid-cols-3'>
-        {notes.map((note,index)=>(
+
+      {/* Category buttons */}
+      <div className='flex items-center justify-center gap-6'>
+        {/* Your existing category buttons */}
+      </div>
+
+      {/* Notes grid */}
+      <div className='p-10 grid grid-cols-3'>
+        {notes.map((note, index) => (
           <TextCard
-          key={index}
-          title={note.title}
-          content={note.content}
-          onDelete = {()=>deleteNote( index)}
+            key={index}
+            title={note.title}
+            content={note.content}
+            onDelete={() => deleteNote(index)}
+            onEdit={() => editNote(note, index)}
           />
         ))}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default page
+export default page;
