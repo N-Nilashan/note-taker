@@ -11,7 +11,7 @@ export async function POST(request) {
 
     // Initialize Gemini API
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
     const prompt = `Please summarize the following text concisely:\n${content}`;
     const result = await model.generateContent(prompt);
@@ -19,6 +19,11 @@ export async function POST(request) {
 
     return Response.json({ summary });
   } catch (error) {
+    console.error("Error in /api/summarize:", error);
     return Response.json({ error: error.message }, { status: 500 });
-  }
+
 }
+}
+
+
+
