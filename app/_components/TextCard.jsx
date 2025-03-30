@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
-const TextCard = ({ title, content, onDelete,onEdit }) => {
+const TextCard = ({ title, content, onDelete,onEdit,date }) => {
   const [summary, setSummary] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -32,7 +32,7 @@ const TextCard = ({ title, content, onDelete,onEdit }) => {
     <div className="relative dark:bg-black w-96 bg-white shadow-sm border border-emerald-400 rounded-3xl p-3 pb-6">
       <div className="justify-start mb-3 px-2">
         <h5 className="text-primary dark:text-secondary text-2xl font-semibold">{title}</h5>
-        <p className='text-primary mt-3 dark:text-secondary'>Work</p>
+        <p className="text-sm text-gray-400">{new Date(date).toLocaleString()}</p> {/* Format date */}
       </div>
       <div className="p-3 mt-5 border-t border-emerald-400 text-center max-h-52 overflow-y-auto">
         {loading ? (

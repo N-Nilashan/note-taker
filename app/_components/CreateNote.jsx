@@ -26,17 +26,19 @@ export default function CreateNote({ isOpen, onClose, addNote, currentNote, upda
   const handleSave = () => {
     if (!title.trim() || !content.trim()) return; // Prevent empty notes
 
+    const date = new Date().toISOString(); // Store date in ISO format
+
     if (currentNote) {
-      // We're editing an existing note
-      updateNote({ title, content }, currentNote.index);
+      // Updating an existing note
+      updateNote({ title, content, date }, currentNote.index);
     } else {
-      // We're creating a new note
-      addNote({ title, content });
+      // Creating a new note
+      addNote({ title, content, date });
     }
 
-    // Reset and close
     onClose();
   };
+
 
   return (
     <>

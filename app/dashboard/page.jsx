@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UserButton } from '@clerk/nextjs';
 import Navbar from '../_components/Navbar';
 import { Pencil, Pin, Plus, Search } from 'lucide-react';
@@ -11,13 +11,40 @@ const page = () => {
   const [notes, setNotes] = useState([]);
   const [currentNote, setCurrentNote] = useState(null);
 
-  const deleteNote = (indexToDelete) => {
-    setNotes(notes.filter((_, index) => index !== indexToDelete));
+
+
+  const addNote = async (newNote) => {
+    try {
+      const response = await fetch('/api/notes/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newNote)
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setNotes([...notes, data.note]);
+      }
+    } catch (error) {
+      console.error("Error adding note:", error);
+    }
   };
 
-  const addNote = (newNote) => {
-    setNotes([...notes, {id: Date.now(), ...newNote}]);
-  };
+
+  //fetching notes to DB
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const response = await fetch('/api/notes/get');
+        const data = await response.json();
+        setNotes(data);
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+      }
+    };
+
+    fetchNotes();
+  }, []);
 
   // New function to handle editing a note
   const editNote = (note, index) => {
@@ -30,6 +57,22 @@ const page = () => {
     const updatedNotes = [...notes];
     updatedNotes[index] = {...updatedNotes[index], ...updatedNote};
     setNotes(updatedNotes);
+  };
+
+  const deleteNote = async (id) => {
+    try {
+      const response = await fetch('/api/notes/delete', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+
+      if (response.ok) {
+        setNotes(notes.filter(note => note._id !== id));
+      }
+    } catch (error) {
+      console.error("Error deleting note:", error);
+    }
   };
 
   // Function to handle closing the modal and resetting currentNote
@@ -79,12 +122,13 @@ const page = () => {
       <div className='p-10 grid grid-cols-3'>
         {notes.map((note, index) => (
           <TextCard
-            key={index}
+            key={note._id}
             title={note.title}
             content={note.content}
-            onDelete={() => deleteNote(index)}
-            onEdit={() => editNote(note, index)}
+            onDelete={() => deleteNote(note._id)}
+            onEdit={() => editNote(note)}
           />
+
         ))}
       </div>
     </>
