@@ -1,5 +1,5 @@
-import { connectDB } from '@/lib/db';
-import Note from '@/models/Note';
+import { connectDB } from '../../../../lib/db';
+import Note from '../../../../lib/models/Note';
 import { auth } from "@clerk/nextjs";
 
 export async function DELETE(req) {
