@@ -90,7 +90,7 @@ const page = () => {
       <div className='flex items-center justify-center gap-6 p-5'>
         <div>
           <button
-            className="bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4"
+            className="bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-white  font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4"
             onClick={() => setIsOpen(true)}
           >
             <Pencil/>Add Note
@@ -105,10 +105,10 @@ const page = () => {
         </div>
 
         {/* Other buttons */}
-        <button className='bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4'>
+        <button className='bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-white font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4'>
           <Pin/>Pinned Notes
         </button>
-        <button className='bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-secondary font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4'>
+        <button className='bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-white font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4'>
           <Search/>Search Notes
         </button>
       </div>

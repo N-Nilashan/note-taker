@@ -36,13 +36,13 @@ const Hero = () => {
           <Button
             onClick={handleRedirect}
             size="lg"
-            className='text-lg px-8 py-6 dark:bg-dbtn bg-primary rounded-full font-semibold text-secondary hover:bg-foreground dark:hover:bg-primary'
+            className='text-lg px-8 py-6 dark:bg-dbtn bg-primary rounded-full font-semibold text-white hover:bg-secondary dark:hover:bg-secondary'
           >
             Get Started
           </Button>
           <Button
             size="lg"
-            className='text-lg px-8 py-6 dark:bg-dbtn bg-primary rounded-full font-semibold text-secondary hover:bg-foreground dark:hover:bg-primary'
+            className='text-lg px-8 py-6 dark:bg-dbtn bg-primary rounded-full font-semibold  text-white hover:bg-secondary dark:hover:bg-secondary'
           >
             See Features
           </Button>

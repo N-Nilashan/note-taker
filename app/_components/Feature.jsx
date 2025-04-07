@@ -91,7 +91,7 @@ const Feature = () => {
       <div  className='text-primary dark:text-secondary font-bold text-center'>
        <h1 className='text-[40px]'>Start Using AI Notes Today</h1>
        <Link href="/sign-up">
-       <Button onClick={handleRedirect} className='mt-7 px-6 py-6 dark:bg-dbtn bg-primary rounded-full text-bold text-secondary hover:bg-foreground dark:hover:bg-primary' >Get Started</Button>
+       <Button onClick={handleRedirect} className='mt-7 px-6 py-6 dark:bg-dbtn bg-primary rounded-full font-bold text-white hover:bg-secondary dark:hover:bg-secondary' >Get Started</Button>
        </Link>
       </div>
     </>

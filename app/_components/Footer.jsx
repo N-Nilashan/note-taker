@@ -5,7 +5,7 @@ import { Button } from '../../components/ui/button'
 const Footer = () => {
   return (
 
-      <div className=' text-center mt-10 text-secondary font-bold bg-primary dark:bg-emerald-900/20 h-[210px]'>
+      <div className=' text-center mt-10 text-white font-bold bg-primary dark:bg-emerald-900/20 h-[210px]'>
         <div className='p-[8px]'>
           <h2 className='mt-[30px] text-2xl'>Nimesh Nilashan</h2>
           <p className="mt-4 text-sm ">&copy; 2025 All rights reserved.</p>
