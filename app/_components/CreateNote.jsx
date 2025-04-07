@@ -1,90 +1,120 @@
-import { X } from "lucide-react";
-import React, { useEffect, useState } from "react";
+'use client'
+import { useState, useEffect } from 'react';
+import { X } from 'lucide-react';
 
 export default function CreateNote({ isOpen, onClose, addNote, currentNote, updateNote }) {
-  // All state hooks at the top level
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [category, setCategory] = useState('General');
 
-  // useEffect to handle form population when editing
   useEffect(() => {
-    if (currentNote && isOpen) {
-      // Populate form fields with the note being edited
-      setTitle(currentNote.title || "");
-      setContent(currentNote.content || "");
-    } else if (!isOpen) {
-      // Reset form when closing
-      setTitle("");
-      setContent("");
-    }
-  }, [currentNote, isOpen]);
-
-  // Conditional return AFTER all hooks are defined
-  if (!isOpen) return null;
-
-  // Handle saving (both new notes and edits)
-  const handleSave = () => {
-    if (!title.trim() || !content.trim()) return; // Prevent empty notes
-
-    const date = new Date().toISOString(); // Store date in ISO format
-
     if (currentNote) {
-      // Updating an existing note
-      updateNote({ title, content, date }, currentNote.index);
+      setTitle(currentNote.title);
+      setContent(currentNote.content);
+      setCategory(currentNote.category || 'General');
     } else {
-      // Creating a new note
-      addNote({ title, content, date });
+      setTitle('');
+      setContent('');
+      setCategory('General');
+    }
+  }, [currentNote]);
+
+  const handleSave = async () => {
+    if (!title.trim() || !content.trim()) {
+      alert('Please fill in both title and content');
+      return;
     }
 
-    onClose();
+    const noteData = {
+      title: title.trim(),
+      content: content.trim(),
+      category
+    };
+
+    let success;
+    if (currentNote) {
+      success = await updateNote(currentNote._id, noteData);
+    } else {
+      success = await addNote(noteData);
+    }
+
+    if (success) {
+      setTitle('');
+      setContent('');
+      setCategory('General');
+      onClose();
+    } else {
+      alert('Failed to save note. Please try again.');
+    }
   };
 
+  if (!isOpen) return null;
 
   return (
     <>
       {/* Dark background overlay */}
       <div className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm z-10"></div>
-      <div className="p-4 z-20 rounded-lg border-2 w-[640px] dark:bg-emerald-900 bg-dbtn border-emerald-400 text-white fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <div className="p-4 z-20 rounded-lg border-2 w-[640px] dark:bg-[#0C1716] bg-emerald-800/40 border-emerald-700/30 text-white fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <span className="flex justify-end">
           <button className="text-white text-lg" onClick={onClose}>
-            <X/>
+            <X />
           </button>
         </span>
         <div className="flex justify-between items-center mb-2">
-          {/* Show different title based on whether we're editing or creating */}
           <h2 className="text-xl font-bold text-white">
             {currentNote ? "Edit Note" : "Create New Note"}
           </h2>
         </div>
 
         <div className="mb-6">
-          <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-secondary dark:text-white">Title</label>
+          <label htmlFor="title" className="block mb-2 text-sm font-medium text-white">Title</label>
           <input
             type="text"
-            id="default-input"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[600px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            id="title"
+            className="bg-emerald-900/20 border border-emerald-700/30 text-white text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            placeholder="Enter note title..."
           />
         </div>
 
-        <p className="text-md font-medium mb-2">Select category</p>
+        <div className="mb-6">
+          <label htmlFor="category" className="block mb-2 text-sm font-medium text-white">Category</label>
+          <select
+            id="category"
+            className="bg-emerald-900/20 border border-emerald-700/30 text-white text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="General">General</option>
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+            <option value="Ideas">Ideas</option>
+            <option value="Tasks">Tasks</option>
+          </select>
+        </div>
 
-        <label htmlFor="message" className="block mb-2 text-sm font-medium text-secondary dark:text-white">Your Note</label>
+        <label htmlFor="content" className="block mb-2 text-sm font-medium text-white">Your Note</label>
         <textarea
-          id="message"
+          id="content"
           rows="4"
-          className="block p-2.5 w-[600px] h-[450px] text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:border-emerald-500 dark:placeholder-gray-400 dark:text-white dark:emerald-500 dark:focus:border-blue-500"
+          className="block p-2.5 w-full h-[450px] text-sm text-white bg-emerald-900/20 rounded-lg border border-emerald-700/30 focus:ring-emerald-500 focus:border-emerald-500"
           placeholder="Write your thoughts here..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
         ></textarea>
 
-        <div className="flex justify-end gap-2 mt-2">
-          <button onClick={handleSave} className="px-4 py-2 bg-primary text-secondary rounded">
+        <div className="flex justify-end gap-2 mt-4">
+          <button
+            onClick={handleSave}
+            className="px-4 py-2 bg-emerald-800/40 hover:bg-emerald-800/60 text-white rounded-lg"
+          >
             {currentNote ? "Update" : "Save"}
           </button>
-          <button className="px-4 py-2 bg-gray-500 text-white rounded" onClick={onClose}>
+          <button
+            className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg"
+            onClick={onClose}
+          >
             Cancel
           </button>
         </div>

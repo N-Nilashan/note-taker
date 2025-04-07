@@ -1,81 +1,97 @@
 'use client'
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UserButton } from '@clerk/nextjs';
-import Navbar from '../_components/Navbar';
-import { Pencil, Pin, Plus, Search } from 'lucide-react';
-import TextCard from '../_components/TextCard';
-import CreateNote from '../_components/CreateNote';
+import Navbar from '@/app/_components/Navbar';
+import CreateNote from '@/app/_components/CreateNote';
+import TextCard from '@/app/_components/TextCard';
+import { Pin, Search, Pencil } from 'lucide-react';
 
-const page = () => {
+export default function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
   const [notes, setNotes] = useState([]);
   const [currentNote, setCurrentNote] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-
-
-  const addNote = async (newNote) => {
-    try {
-      const response = await fetch('/api/notes/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newNote)
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setNotes([...notes, data.note]);
-      }
-    } catch (error) {
-      console.error("Error adding note:", error);
-    }
-  };
-
-
-  //fetching notes to DB
+  // Fetch notes when component mounts
   useEffect(() => {
-    const fetchNotes = async () => {
-      try {
-        const response = await fetch('/api/notes/get');
-        const data = await response.json();
-        setNotes(data);
-      } catch (error) {
-        console.error("Error fetching notes:", error);
-      }
-    };
-
     fetchNotes();
   }, []);
 
-  // New function to handle editing a note
-  const editNote = (note, index) => {
-    setCurrentNote({...note, index});
-    setIsOpen(true);
+  const fetchNotes = async () => {
+    try {
+      const response = await fetch('/api/notes');
+      if (!response.ok) throw new Error('Failed to fetch notes');
+      const data = await response.json();
+      setNotes(data);
+    } catch (error) {
+      console.error('Error fetching notes:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // New function to handle updating a note
-  const updateNote = (updatedNote, index) => {
-    const updatedNotes = [...notes];
-    updatedNotes[index] = {...updatedNotes[index], ...updatedNote};
-    setNotes(updatedNotes);
+  const addNote = async (noteData) => {
+    try {
+      const response = await fetch('/api/notes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(noteData),
+      });
+
+      if (!response.ok) throw new Error('Failed to create note');
+      const newNote = await response.json();
+      setNotes(prevNotes => [newNote, ...prevNotes]);
+      return true;
+    } catch (error) {
+      console.error('Error adding note:', error);
+      return false;
+    }
+  };
+
+  const updateNote = async (id, noteData) => {
+    try {
+      const response = await fetch(`/api/notes/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(noteData),
+      });
+
+      if (!response.ok) throw new Error('Failed to update note');
+      const updatedNote = await response.json();
+      setNotes(prevNotes =>
+        prevNotes.map(note =>
+          note._id === id ? updatedNote : note
+        )
+      );
+      return true;
+    } catch (error) {
+      console.error('Error updating note:', error);
+      return false;
+    }
   };
 
   const deleteNote = async (id) => {
     try {
-      const response = await fetch('/api/notes/delete', {
+      const response = await fetch(`/api/notes/${id}`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id })
       });
 
-      if (response.ok) {
-        setNotes(notes.filter(note => note._id !== id));
-      }
+      if (!response.ok) throw new Error('Failed to delete note');
+      setNotes(prevNotes => prevNotes.filter(note => note._id !== id));
     } catch (error) {
-      console.error("Error deleting note:", error);
+      console.error('Error deleting note:', error);
     }
   };
 
-  // Function to handle closing the modal and resetting currentNote
+  const handleEdit = (note) => {
+    setCurrentNote(note);
+    setIsOpen(true);
+  };
+
   const handleCloseModal = () => {
     setIsOpen(false);
     setCurrentNote(null);
@@ -90,10 +106,10 @@ const page = () => {
       <div className='flex items-center justify-center gap-6 p-5'>
         <div>
           <button
-            className="bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-white  font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4"
+            className="bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-800/60 dark:bg-emerald-800/40 text-white font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4"
             onClick={() => setIsOpen(true)}
           >
-            <Pencil/>Add Note
+            <Pencil />Add Note
           </button>
           <CreateNote
             isOpen={isOpen}
@@ -104,35 +120,32 @@ const page = () => {
           />
         </div>
 
-        {/* Other buttons */}
-        <button className='bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-white font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4'>
-          <Pin/>Pinned Notes
+        <button className='bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-800/60 dark:bg-emerald-800/40 text-white font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4'>
+          <Pin />Pinned Notes
         </button>
-        <button className='bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-900 dark:bg-primary text-white font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4'>
-          <Search/>Search Notes
+        <button className='bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-800/60 dark:bg-emerald-800/40 text-white font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4'>
+          <Search />Search Notes
         </button>
       </div>
 
-      {/* Category buttons */}
-      <div className='flex items-center justify-center gap-6'>
-        {/* Your existing category buttons */}
-      </div>
-
-      {/* Notes grid */}
-      <div className='p-10 grid grid-cols-3'>
-        {notes.map((note, index) => (
-          <TextCard
-            key={note._id}
-            title={note.title}
-            content={note.content}
-            onDelete={() => deleteNote(note._id)}
-            onEdit={() => editNote(note)}
-          />
-
-        ))}
-      </div>
+      {loading ? (
+        <div className="flex justify-center items-center mt-10">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
+        </div>
+      ) : (
+        <div className="flex flex-wrap gap-6 justify-center mt-10 px-4">
+          {notes.map((note) => (
+            <TextCard
+              key={note._id}
+              title={note.title}
+              content={note.content}
+              date={note.createdAt}
+              onDelete={() => deleteNote(note._id)}
+              onEdit={() => handleEdit(note)}
+            />
+          ))}
+        </div>
+      )}
     </>
   );
-};
-
-export default page;
+}
