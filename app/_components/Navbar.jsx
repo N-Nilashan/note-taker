@@ -26,16 +26,16 @@ const Navbar = ({ customButton }) => {
             alt='logo'
             className='-mt-[25px]'
           />
-          <h2 className='text-secondary ml-[2px]'>AI-Notes</h2>
+          <h2 className='text-secondary dark:text-secondary ml-[2px]'>AI-Notes</h2>
         </span>
 
         <span className='flex items-center -mt-[25px] px-7'>
           <DarkModeToggle />
           {customButton ? customButton : (
 
-              <Button  onClick={handleRedirect}  className='mt-1 font-bold text-[20px] bg-primary hover:bg-foreground px-7'>
-                Get Started
-              </Button>
+            <Button onClick={handleRedirect} className='mt-1 font-bold text-[20px] bg-primary hover:bg-foreground px-7'>
+              Get Started
+            </Button>
 
 
           )}

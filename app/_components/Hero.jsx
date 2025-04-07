@@ -17,34 +17,47 @@ const Hero = () => {
   };
 
   return (
-    <div>
-      <div className='flex items-center justify-center'>
-        <div className='py-9 w-[500px] h-[500px]'>
-          <PenModel/>
+    <section className="relative overflow-hidden py-12 md:py-20 lg:py-24">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className='flex flex-col items-center justify-center'>
+          <div className='py-9 w-[500px] h-[500px]'>
+            <PenModel />
+          </div>
+        </div>
+        <div className='text-center space-y-8'>
+          <h1 className='text-4xl md:text-6xl lg:text-7xl font-bold text-primary dark:text-[#388E3C]'>
+            Take Smarter Notes with AI
+          </h1>
+          <h2 className='text-xl md:text-2xl lg:text-3xl text-foreground dark:text-[#388E3C] max-w-3xl mx-auto'>
+            Write, Organise, and Summarize notes instantly with AI assistance
+          </h2>
+        </div>
+        <div className='flex items-center justify-center gap-6 mt-12'>
+          <Button
+            onClick={handleRedirect}
+            size="lg"
+            className='text-lg px-8 py-6 dark:bg-dbtn bg-primary rounded-full font-semibold text-secondary hover:bg-foreground dark:hover:bg-primary'
+          >
+            Get Started
+          </Button>
+          <Button
+            size="lg"
+            className='text-lg px-8 py-6 dark:bg-dbtn bg-primary rounded-full font-semibold text-secondary hover:bg-foreground dark:hover:bg-primary'
+          >
+            See Features
+          </Button>
+        </div>
+        <div className='mt-16 flex items-center justify-center'>
+          <Image
+            src='/demo.png'
+            alt='demo picture'
+            width={1000}
+            height={800}
+            className="rounded-lg shadow-xl"
+          />
         </div>
       </div>
-      <div className='text-primary dark:text-secondary font-bold text-center'>
-        <h1 className=' text-[70px]'>Take Smarter Notes with AI</h1>
-        <h2 className='text-[30px] text-foreground'>Write, Organise, and Summarize notes instantly with AI assistance</h2>
-      </div>
-      <div className='flex items-center justify-center gap-6 mt-7'>
-
-        <Button  onClick={handleRedirect} className='px-6 py-6 dark:bg-dbtn bg-primary rounded-full text-bold text-secondary hover:bg-foreground dark:hover:bg-primary'>Get Started</Button>
-
-        <Button className='px-6 py-6 dark:bg-dbtn bg-primary rounded-full text-bold text-secondary hover:bg-foreground dark:hover:bg-primary'>See Features</Button>
-
-      </div>
-      <div className='p-6 flex items-center justify-center'>
-        <Image
-          src='/demo.png'
-          alt='demo picture'
-          width={1000}
-          height={800}
-
-        />
-      </div>
-
-    </div>
+    </section>
   )
 }
 
