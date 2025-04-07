@@ -108,6 +108,14 @@ export default function Dashboard() {
   const deleteNote = async (id) => {
     try {
       const token = await getToken();
+      console.log("Delete note - Auth token:", token ? "Token exists" : "No token");
+
+      if (!token) {
+        console.error("No auth token available for delete operation");
+        return;
+      }
+
+      console.log("Attempting to delete note:", id);
       const response = await fetch(`/api/notes/${id}`, {
         method: 'DELETE',
         headers: {
@@ -115,10 +123,21 @@ export default function Dashboard() {
         }
       });
 
-      if (!response.ok) throw new Error('Failed to delete note');
+      console.log("Delete response status:", response.status);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Delete error response:", errorData);
+        throw new Error(errorData.error || 'Failed to delete note');
+      }
+
+      const result = await response.json();
+      console.log("Delete result:", result);
+
       setNotes(prevNotes => prevNotes.filter(note => note._id !== id));
     } catch (error) {
       console.error('Error deleting note:', error);
+      // You might want to show an error message to the user here
     }
   };
 
