@@ -1,27 +1,46 @@
 'use client'
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { useAuth } from '@clerk/nextjs';
 
 const TextCard = ({ title, content, onDelete, onEdit, date }) => {
   const [summary, setSummary] = useState('');
   const [loading, setLoading] = useState(false);
-
+  const { getToken, isLoaded, isSignedIn } = useAuth();
   const [summarized, setSummarized] = useState(false)
 
   const handleSummarize = async () => {
+    if (!isLoaded || !isSignedIn) {
+      console.error("Not authenticated when trying to summarize");
+      return;
+    }
+
     setLoading(true);
     try {
+      const token = await getToken();
+      console.log("Auth token for summarize:", token ? "Token exists" : "No token");
+
       const response = await fetch('/api/summarize', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ content }),
       });
 
+      console.log("Summarize response status:", response.status);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error response:", errorData);
+        throw new Error(errorData.error || 'Failed to summarize');
+      }
+
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Failed to summarize');
       setSummary(data.summary);
     } catch (err) {
-      console.log(err.message);
+      console.error("Summarize error:", err.message);
     } finally {
       setLoading(false);
       setSummarized(true)

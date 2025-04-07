@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react';
-import { UserButton } from '@clerk/nextjs';
+import { UserButton, useAuth } from '@clerk/nextjs';
 import Navbar from '@/app/_components/Navbar';
 import CreateNote from '@/app/_components/CreateNote';
 import TextCard from '@/app/_components/TextCard';
@@ -11,16 +11,34 @@ export default function Dashboard() {
   const [notes, setNotes] = useState([]);
   const [currentNote, setCurrentNote] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { getToken, isLoaded, isSignedIn } = useAuth();
 
   // Fetch notes when component mounts
   useEffect(() => {
-    fetchNotes();
-  }, []);
+    if (isLoaded && isSignedIn) {
+      fetchNotes();
+    }
+  }, [isLoaded, isSignedIn]);
 
   const fetchNotes = async () => {
     try {
-      const response = await fetch('/api/notes');
-      if (!response.ok) throw new Error('Failed to fetch notes');
+      const token = await getToken();
+      console.log("Auth token:", token ? "Token exists" : "No token");
+
+      const response = await fetch('/api/notes', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      console.log("Response status:", response.status);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error response:", errorData);
+        throw new Error('Failed to fetch notes');
+      }
+
       const data = await response.json();
       setNotes(data);
     } catch (error) {
@@ -32,15 +50,26 @@ export default function Dashboard() {
 
   const addNote = async (noteData) => {
     try {
+      const token = await getToken();
+      console.log("Auth token for addNote:", token ? "Token exists" : "No token");
+
       const response = await fetch('/api/notes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(noteData),
       });
 
-      if (!response.ok) throw new Error('Failed to create note');
+      console.log("Add note response status:", response.status);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error response:", errorData);
+        throw new Error('Failed to create note');
+      }
+
       const newNote = await response.json();
       setNotes(prevNotes => [newNote, ...prevNotes]);
       return true;
@@ -52,10 +81,12 @@ export default function Dashboard() {
 
   const updateNote = async (id, noteData) => {
     try {
+      const token = await getToken();
       const response = await fetch(`/api/notes/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(noteData),
       });
@@ -76,8 +107,12 @@ export default function Dashboard() {
 
   const deleteNote = async (id) => {
     try {
+      const token = await getToken();
       const response = await fetch(`/api/notes/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
 
       if (!response.ok) throw new Error('Failed to delete note');
