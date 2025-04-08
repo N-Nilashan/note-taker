@@ -100,8 +100,9 @@
 .cl-userButtonOuterIdentifier {
   @apply text-secondary !important;
 }
-.cl-userButtonOuterIdentifier{
+.cl-userButtonOuterIdentifier {
   @apply text-white !important;
+  @apply dark:text-slate-900 !important;
 }
 @layer base {
   * {

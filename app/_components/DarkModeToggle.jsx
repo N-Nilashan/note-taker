@@ -30,7 +30,7 @@ const DarkModeToggle = () => {
 
         {/* Moon Icon for Dark Mode */}
         <svg
-          className={`fill-slate-500 block ${isDarkMode ? 'block' : 'hidden'}`}
+          className={`fill-slate-900 block ${isDarkMode ? 'block' : 'hidden'}`}
           fill="currentColor"
           viewBox="0 0 20 20"
         >

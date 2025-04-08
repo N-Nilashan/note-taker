@@ -17,11 +17,11 @@ export async function PUT(req, { params }) {
     console.log("User authenticated with ID:", userId);
     await connectDB();
     const { id } = params;
-    const { title, content, category, isPinned } = await req.json();
+    const { title, content, category, isPinned, summary } = await req.json();
 
     const note = await Note.findOneAndUpdate(
       { _id: id, userId },
-      { title, content, category, isPinned },
+      { title, content, category, isPinned, summary },
       { new: true }
     );
 

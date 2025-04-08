@@ -1,13 +1,14 @@
 'use client'
 import { useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Pin } from 'lucide-react';
 import { useAuth } from '@clerk/nextjs';
+import HighlightText from './HighlightText';
 
-const TextCard = ({ title, content, onDelete, onEdit, date }) => {
-  const [summary, setSummary] = useState('');
+const TextCard = ({ title, content, onDelete, onEdit, date, noteId, summary: savedSummary, category, isPinned, onPin, searchQuery }) => {
+  const [summary, setSummary] = useState(savedSummary || '');
   const [loading, setLoading] = useState(false);
   const { getToken, isLoaded, isSignedIn } = useAuth();
-  const [summarized, setSummarized] = useState(false)
+  const [summarized, setSummarized] = useState(!!savedSummary)
 
   const handleSummarize = async () => {
     if (!isLoaded || !isSignedIn) {
@@ -39,6 +40,24 @@ const TextCard = ({ title, content, onDelete, onEdit, date }) => {
 
       const data = await response.json();
       setSummary(data.summary);
+
+      // Save the summary to the database
+      const updateResponse = await fetch(`/api/notes/${noteId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          title,
+          content,
+          summary: data.summary
+        }),
+      });
+
+      if (!updateResponse.ok) {
+        throw new Error('Failed to save summary to database');
+      }
     } catch (err) {
       console.error("Summarize error:", err.message);
     } finally {
@@ -48,12 +67,28 @@ const TextCard = ({ title, content, onDelete, onEdit, date }) => {
   };
 
   return (
-    <div className="relative dark:bg-[#0C1716] w-96 bg-white shadow-sm border border-emerald-700/30 rounded-3xl p-3 pb-6">
+    <div className={`relative dark:bg-[#0C1716] w-96 bg-white shadow-sm border border-emerald-700/30 rounded-3xl p-3 pb-6 ${isPinned ? 'border-2 border-emerald-500' : ''}`}>
       <div className="justify-start mb-3 px-2">
-        <h5 className="text-primary dark:text-emerald-400 text-2xl font-semibold">{title}</h5>
-        <p className="text-sm text-gray-400 dark:text-gray-300">{new Date(date).toLocaleString()}</p>
+        <div className="flex justify-between items-center">
+          <h5 className="text-primary dark:text-emerald-400 text-2xl font-semibold">
+            <HighlightText text={title} searchQuery={searchQuery} />
+          </h5>
+          <button
+            onClick={() => onPin(noteId, !isPinned)}
+            className={`p-1 rounded-full ${isPinned ? 'text-emerald-500' : 'text-gray-400 hover:text-emerald-500'}`}
+            title={isPinned ? "Unpin note" : "Pin note"}
+          >
+            <Pin size={18} fill={isPinned ? "currentColor" : "none"} />
+          </button>
+        </div>
+        <div className="flex justify-between items-center">
+          <p className="text-sm text-gray-400 dark:text-gray-300">{new Date(date).toLocaleString()}</p>
+          <span className="text-xs px-2 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 rounded-full">
+            {category || 'General'}
+          </span>
+        </div>
       </div>
-      <div className="p-3 mt-5 border-t border-emerald-700/30 text-center max-h-52 overflow-y-auto">
+      <div className="p-3 mt-5 border-t border-emerald-700/30 max-h-52 overflow-y-auto">
         {loading ? (
           <div className="flex justify-center items-center">
             <Loader2 className="animate-spin text-emerald-900 dark:text-emerald-400" size={24} />
@@ -61,7 +96,7 @@ const TextCard = ({ title, content, onDelete, onEdit, date }) => {
           </div>
         ) : (
           <p className="block text-emerald-900 dark:text-emerald-100 leading-normal font-light mb-4 max-w-lg">
-            {summary || content}
+            <HighlightText text={summary || content} searchQuery={searchQuery} />
           </p>
         )}
       </div>
