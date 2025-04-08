@@ -43,6 +43,7 @@ export default function Dashboard() {
       }
 
       const data = await response.json();
+      console.log("Fetched notes:", data);
       setNotes(data);
     } catch (error) {
       console.error('Error fetching notes:', error);
@@ -85,6 +86,8 @@ export default function Dashboard() {
   const updateNote = async (id, noteData) => {
     try {
       const token = await getToken();
+      console.log("Updating note with data:", noteData);
+
       const response = await fetch(`/api/notes/${id}`, {
         method: 'PUT',
         headers: {
@@ -96,6 +99,8 @@ export default function Dashboard() {
 
       if (!response.ok) throw new Error('Failed to update note');
       const updatedNote = await response.json();
+      console.log("Note update response:", updatedNote);
+
       setNotes(prevNotes =>
         prevNotes.map(note =>
           note._id === id ? updatedNote : note
@@ -298,6 +303,7 @@ export default function Dashboard() {
                       onEdit={() => handleEdit(note)}
                       noteId={note._id}
                       summary={note.summary}
+                      enhancedContent={note.enhancedContent}
                       category={note.category}
                       isPinned={note.isPinned}
                       onPin={togglePin}

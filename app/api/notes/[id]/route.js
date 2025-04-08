@@ -17,11 +17,12 @@ export async function PUT(req, { params }) {
     console.log("User authenticated with ID:", userId);
     await connectDB();
     const { id } = params;
-    const { title, content, category, isPinned, summary } = await req.json();
+    const updateData = await req.json();
+    console.log("Received update data:", updateData);
 
     const note = await Note.findOneAndUpdate(
       { _id: id, userId },
-      { title, content, category, isPinned, summary },
+      updateData,
       { new: true }
     );
 
@@ -30,6 +31,7 @@ export async function PUT(req, { params }) {
       return NextResponse.json({ error: 'Note not found' }, { status: 404 });
     }
 
+    console.log("Updated note:", note);
     return NextResponse.json(note);
   } catch (error) {
     console.error("Error in PUT /api/notes/[id]:", error);
