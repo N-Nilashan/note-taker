@@ -143,143 +143,119 @@ const TextCard = ({ title, content, onDelete, onEdit, date, noteId, summary: sav
   return (
     <>
       <div
-        className={`relative w-full max-w-lg bg-[#F8F5F2] dark:bg-[#2D2D3A] shadow-lg border border-[#E5E0D9] dark:border-[#3D3D4A] rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl ${isPinned ? 'border-2 border-emerald-500 dark:border-[#F8F5F2]' : ''}`}
+        className={`relative w-full bg-[#F8F5F2] dark:bg-[#2D2D3A] shadow-lg border border-[#E5E0D9] dark:border-[#3D3D4A] rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl ${isPinned ? 'border-2 border-emerald-500 dark:border-[#F8F5F2]' : ''}`}
       >
         {/* Header with pin indicator */}
-        <div className={`h-2 ${isPinned ? 'bg-emerald-500' : 'bg-[#E5E0D9] dark:bg-[#3D3D4A]'}`}></div>
+        <div className={`h-1.5 ${isPinned ? 'bg-emerald-500' : 'bg-[#E5E0D9] dark:bg-[#3D3D4A]'}`}></div>
 
-        <div className="p-6 space-y-5">
+        <div className="p-5 space-y-4">
           {/* Title and pin button */}
-          <div className="flex justify-between items-start">
+          <div className="flex justify-between items-start gap-3">
             <h5
               onClick={() => setIsNoteModalOpen(true)}
-              className="text-[#2D2D3A] dark:text-[#F8F5F2] text-xl font-semibold pr-8 leading-tight cursor-pointer hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+              className="text-[#2D2D3A] dark:text-[#F8F5F2] text-lg font-semibold leading-tight cursor-pointer hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors line-clamp-2"
             >
               <HighlightText text={title} searchQuery={searchQuery} />
             </h5>
             <button
               onClick={() => onPin(noteId, !isPinned)}
-              className={`p-2 rounded-full hover:bg-[#E5E0D9] dark:hover:bg-[#3D3D4A] transition-colors ${isPinned
+              className={`p-1.5 rounded-full hover:bg-[#E5E0D9] dark:hover:bg-[#3D3D4A] transition-colors flex-shrink-0 ${isPinned
                 ? 'text-emerald-500 dark:text-emerald-400'
                 : 'text-[#2D2D3A]/40 dark:text-[#F8F5F2]/40 hover:text-emerald-500 dark:hover:text-emerald-400'
                 }`}
               title={isPinned ? "Unpin note" : "Pin note"}
             >
-              <Pin size={20} fill={isPinned ? "currentColor" : "none"} />
+              <Pin size={16} fill={isPinned ? "currentColor" : "none"} />
             </button>
           </div>
 
-          {/* Metadata row */}
-          <div className="flex flex-wrap gap-4 items-center text-sm text-[#2D2D3A]/60 dark:text-[#F8F5F2]/60">
-            <div className="flex items-center gap-1.5">
-              <Calendar size={16} />
-              <span>
-                {new Date(date).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                })}
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Tag size={16} />
-              <span className="px-2.5 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 rounded-full text-xs font-medium">
-                {category || 'General'}
-              </span>
-            </div>
-          </div>
-
-          {/* Content area */}
-          <div className="border-t border-[#E5E0D9] dark:border-[#3D3D4A] pt-5">
-            <div
-              className="max-h-56 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-emerald-200 dark:scrollbar-thumb-emerald-800/30 scrollbar-track-transparent cursor-pointer"
-              onClick={() => setIsNoteModalOpen(true)}
-            >
-              {loading || enhancing ? (
-                <div className="flex justify-center items-center py-8">
-                  <Loader2 className="animate-spin text-emerald-500 dark:text-emerald-400" size={24} />
-                  <p className="text-emerald-500 dark:text-emerald-400 font-medium ml-3">{loading ? 'Summarizing...' : 'Enhancing...'}</p>
-                </div>
-              ) : (
-                <p className="text-[#2D2D3A]/80 dark:text-[#F8F5F2]/80 leading-relaxed">
-                  <HighlightText
-                    text={showOriginal ? originalContent : (enhanced ? enhancedContent : (summary || content))}
-                    searchQuery={searchQuery}
-                  />
+          {/* Content preview */}
+          <div
+            onClick={() => setIsNoteModalOpen(true)}
+            className="cursor-pointer min-h-[80px]"
+          >
+            {loading || enhancing ? (
+              <div className="flex justify-center items-center py-6">
+                <Loader2 className="animate-spin text-emerald-500 dark:text-emerald-400" size={20} />
+                <p className="text-emerald-500 dark:text-emerald-400 font-medium ml-2 text-sm">
+                  {loading ? 'Summarizing...' : 'Enhancing...'}
                 </p>
-              )}
-            </div>
+              </div>
+            ) : (
+              <p className="text-[#2D2D3A]/70 dark:text-[#F8F5F2]/70 text-sm leading-relaxed line-clamp-3">
+                <HighlightText
+                  text={enhanced ? enhancedContent : (summary || content)}
+                  searchQuery={searchQuery}
+                />
+              </p>
+            )}
           </div>
 
           {/* Action buttons */}
-          <div className="flex flex-col gap-4 pt-5 border-t border-[#E5E0D9] dark:border-[#3D3D4A]">
-            {/* View toggle button */}
-            {(enhanced || summarized) && (
+          <div className="flex flex-col gap-3 pt-3 border-t border-[#E5E0D9] dark:border-[#3D3D4A]">
+            {/* AI Actions */}
+            <div className="flex items-center gap-2">
               <button
-                onClick={() => setShowOriginal(!showOriginal)}
-                className="flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-[#E5E0D9] dark:bg-[#3D3D4A] text-[#2D2D3A] dark:text-[#F8F5F2] rounded-lg text-sm font-medium hover:bg-[#D5D0C9] dark:hover:bg-[#4D4D5A] transition-colors"
+                onClick={handleEnhance}
+                disabled={enhancing || enhanced}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex-1 justify-center ${enhancing || enhanced
+                  ? 'bg-[#E5E0D9] dark:bg-[#3D3D4A] text-[#2D2D3A]/40 dark:text-[#F8F5F2]/40 cursor-not-allowed'
+                  : 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/40 cursor-pointer'
+                  }`}
+                title={enhanced ? "Note already enhanced" : "Enhance writing quality"}
               >
-                <RefreshCw size={16} />
-                {showOriginal ? 'Show Modified Version' : 'Show Original Version'}
+                <Sparkles size={14} />
+                {enhanced ? 'Enhanced' : 'Enhance'}
               </button>
-            )}
 
-            {/* Action buttons row */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex gap-2">
+              <button
+                onClick={handleSummarize}
+                disabled={loading || summarized}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex-1 justify-center ${loading || summarized
+                  ? 'bg-[#E5E0D9] dark:bg-[#3D3D4A] text-[#2D2D3A]/40 dark:text-[#F8F5F2]/40 cursor-not-allowed'
+                  : 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-900/40 cursor-pointer'
+                  }`}
+                title={summarized ? "Note already summarized" : "Generate AI summary"}
+              >
+                <BookOpen size={14} />
+                {summarized ? 'Summarized' : 'Summarize'}
+              </button>
+            </div>
+
+            {/* Metadata and Edit Actions */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3 text-xs text-[#2D2D3A]/60 dark:text-[#F8F5F2]/60">
+                <div className="flex items-center gap-1.5">
+                  <Calendar size={14} />
+                  <span>
+                    {new Date(date).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Tag size={14} />
+                  <span className="px-2 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 rounded-full">
+                    {category || 'General'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1">
                 <button
                   onClick={onEdit}
-                  className="p-2.5 text-[#2D2D3A]/70 dark:text-[#F8F5F2]/70 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors rounded-lg hover:bg-[#E5E0D9] dark:hover:bg-[#3D3D4A]"
+                  className="p-1.5 text-[#2D2D3A]/60 dark:text-[#F8F5F2]/60 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors rounded-lg hover:bg-[#E5E0D9] dark:hover:bg-[#3D3D4A]"
                   title="Edit note"
                 >
-                  <Edit2 size={18} />
+                  <Edit2 size={16} />
                 </button>
                 <button
                   onClick={handleDelete}
-                  className="p-2.5 text-[#2D2D3A]/70 dark:text-[#F8F5F2]/70 hover:text-red-500 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-[#E5E0D9] dark:hover:bg-[#3D3D4A]"
+                  className="p-1.5 text-[#2D2D3A]/60 dark:text-[#F8F5F2]/60 hover:text-red-500 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-[#E5E0D9] dark:hover:bg-[#3D3D4A]"
                   title="Delete note"
                 >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-
-              <div className="flex gap-3 justify-end">
-                <button
-                  onClick={handleEnhance}
-                  disabled={enhancing || enhanced}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${enhancing || enhanced
-                    ? 'bg-[#E5E0D9] dark:bg-[#3D3D4A] text-[#2D2D3A]/40 dark:text-[#F8F5F2]/40 cursor-not-allowed'
-                    : 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/40 cursor-pointer'
-                    }`}
-                  title={enhanced ? "Note already enhanced" : "Enhance writing quality"}
-                >
-                  {enhancing ? (
-                    <Loader2 className="animate-spin" size={16} />
-                  ) : (
-                    <>
-                      <Sparkles size={16} />
-                      {enhanced ? 'Enhanced' : 'Enhance'}
-                    </>
-                  )}
-                </button>
-
-                <button
-                  onClick={handleSummarize}
-                  disabled={loading || summarized}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${loading || summarized
-                    ? 'bg-[#E5E0D9] dark:bg-[#3D3D4A] text-[#2D2D3A]/40 dark:text-[#F8F5F2]/40 cursor-not-allowed'
-                    : 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-900/40 cursor-pointer'
-                    }`}
-                  title={summarized ? "Note already summarized" : "Generate AI summary"}
-                >
-                  {loading ? (
-                    <Loader2 className="animate-spin" size={16} />
-                  ) : (
-                    <>
-                      <BookOpen size={16} />
-                      {summarized ? 'Summarized' : (enhanced ? 'Summarize Again' : 'Summarize')}
-                    </>
-                  )}
+                  <Trash2 size={16} />
                 </button>
               </div>
             </div>
