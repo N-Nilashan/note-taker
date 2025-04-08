@@ -16,9 +16,9 @@ export default function Error({ error, reset }) {
         </h2>
         <button
           onClick={() => reset()}
-          className= "bg-primary text-white px-4 py-2 rounded-md hover:bg-foreground transition duration-300 ease-in-out"
+          className="bg-primary text-white px-4 py-2 rounded-md hover:bg-foreground transition duration-300 ease-in-out"
         >
-          Try again
+          Try refreshing the page or try again.
         </button>
       </div>
     </div>
