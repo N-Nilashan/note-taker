@@ -4,7 +4,7 @@ import { UserButton, useAuth } from '@clerk/nextjs';
 import Navbar from '@/app/_components/Navbar';
 import CreateNote from '@/app/_components/CreateNote';
 import TextCard from '@/app/_components/TextCard';
-import { Pin, Search, Pencil } from 'lucide-react';
+import { Pin, Search, PlusCircle, X } from 'lucide-react';
 
 export default function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
@@ -219,93 +219,120 @@ export default function Dashboard() {
   });
 
   return (
-    <>
-      <div>
-        <Navbar customButton={<UserButton showName />} />
-      </div>
+    <div className="min-h-screen bg-[#F8F5F2] dark:bg-[#2D2D3A]">
+      <Navbar customButton={<UserButton showName />} />
 
-      <div className='flex items-center justify-center gap-6 p-5'>
-        <div>
-          <button
-            className="bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-800/60 dark:bg-emerald-800/40 text-white font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4"
-            onClick={() => setIsOpen(true)}
-          >
-            <Pencil />Add Note
-          </button>
-          <CreateNote
-            isOpen={isOpen}
-            onClose={handleCloseModal}
-            addNote={addNote}
-            currentNote={currentNote}
-            updateNote={updateNote}
-          />
-        </div>
+      <main className="container mx-auto px-4 py-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Header Section */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <h1 className="text-3xl font-bold text-[#2D2D3A] dark:text-[#F8F5F2]">
+              My Notes
+            </h1>
 
-        <button
-          className={`bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-800/60 dark:bg-emerald-800/40 text-white font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4 ${showPinnedOnly ? 'ring-2 ring-emerald-500' : ''}`}
-          onClick={togglePinnedView}
-        >
-          <Pin />{showPinnedOnly ? 'All Notes' : 'Pinned Notes'}
-        </button>
-        <button
-          className={`bg-dbtn hover:bg-emerald-900 dark:hover:bg-emerald-800/60 dark:bg-emerald-800/40 text-white font-myfont font-bold text-lg text-[1.5rem] gap-2 flex items-center rounded-3xl p-4 ${isSearching ? 'ring-2 ring-emerald-500' : ''}`}
-          onClick={toggleSearch}
-        >
-          <Search />{isSearching ? 'Cancel Search' : 'Search Notes'}
-        </button>
-      </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                onClick={() => setIsOpen(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white rounded-lg transition-colors"
+              >
+                <PlusCircle size={20} />
+                <span className="font-medium">New Note</span>
+              </button>
 
-      {isSearching && (
-        <div className="flex justify-center mb-6">
-          <div className="relative w-full max-w-md">
-            <input
-              type="text"
-              placeholder="Search in titles and content..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="w-full p-3 pl-10 rounded-full border border-emerald-700/30 bg-white dark:bg-[#0C1716] text-emerald-900 dark:text-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            />
-            <Search className="absolute left-3 top-3.5 text-emerald-500" size={20} />
+              <button
+                onClick={togglePinnedView}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${showPinnedOnly
+                  ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300'
+                  : 'bg-[#E5E0D9] dark:bg-[#3D3D4A] text-[#2D2D3A] dark:text-[#F8F5F2]'
+                  }`}
+              >
+                <Pin size={20} />
+                <span className="font-medium">{showPinnedOnly ? 'All Notes' : 'Pinned'}</span>
+              </button>
+
+              <button
+                onClick={toggleSearch}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${isSearching
+                  ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300'
+                  : 'bg-[#E5E0D9] dark:bg-[#3D3D4A] text-[#2D2D3A] dark:text-[#F8F5F2]'
+                  }`}
+              >
+                {isSearching ? <X size={20} /> : <Search size={20} />}
+                <span className="font-medium">{isSearching ? 'Close' : 'Search'}</span>
+              </button>
+            </div>
           </div>
-        </div>
-      )}
 
-      {loading ? (
-        <div className="flex justify-center items-center mt-10">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
-        </div>
-      ) : (
-        <div className="flex flex-wrap gap-6 justify-center mt-10 px-4">
-          {filteredNotes.map((note) => (
-            <TextCard
-              key={note._id}
-              title={note.title}
-              content={note.content}
-              date={note.createdAt}
-              onDelete={() => deleteNote(note._id)}
-              onEdit={() => handleEdit(note)}
-              noteId={note._id}
-              summary={note.summary}
-              category={note.category}
-              isPinned={note.isPinned}
-              onPin={togglePin}
-              searchQuery={searchQuery}
-            />
-          ))}
-          {showPinnedOnly && notes.filter(note => note.isPinned).length === 0 && (
-            <div className="text-center p-8 bg-white dark:bg-[#0C1716] rounded-3xl border border-emerald-700/30 w-full max-w-2xl">
-              <h3 className="text-xl font-semibold text-emerald-800 dark:text-emerald-400 mb-2">No Pinned Notes</h3>
-              <p className="text-gray-600 dark:text-gray-400">You haven't pinned any notes yet. Click the pin icon on a note to pin it.</p>
+          {/* Search Bar */}
+          {isSearching && (
+            <div className="mb-8">
+              <div className="relative max-w-2xl mx-auto">
+                <input
+                  type="text"
+                  placeholder="Search notes..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="w-full px-4 py-3 pl-12 rounded-lg border border-[#E5E0D9] dark:border-[#3D3D4A] bg-white dark:bg-[#3D3D4A] text-[#2D2D3A] dark:text-[#F8F5F2] focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 transition-all"
+                />
+                <Search className="absolute left-4 top-3.5 text-[#2D2D3A]/40 dark:text-[#F8F5F2]/40" size={20} />
+              </div>
             </div>
           )}
-          {isSearching && searchQuery && filteredNotes.length === 0 && (
-            <div className="text-center p-8 bg-white dark:bg-[#0C1716] rounded-3xl border border-emerald-700/30 w-full max-w-2xl">
-              <h3 className="text-xl font-semibold text-emerald-800 dark:text-emerald-400 mb-2">No Results Found</h3>
-              <p className="text-gray-600 dark:text-gray-400">No notes match your search query. Try a different search term.</p>
+
+          {/* Notes Grid */}
+          {loading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
             </div>
+          ) : (
+            <>
+              {filteredNotes.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredNotes.map((note) => (
+                    <TextCard
+                      key={note._id}
+                      title={note.title}
+                      content={note.content}
+                      date={note.createdAt}
+                      onDelete={() => deleteNote(note._id)}
+                      onEdit={() => handleEdit(note)}
+                      noteId={note._id}
+                      summary={note.summary}
+                      category={note.category}
+                      isPinned={note.isPinned}
+                      onPin={togglePin}
+                      searchQuery={searchQuery}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <div className="bg-white dark:bg-[#3D3D4A] rounded-xl p-8 max-w-md mx-auto">
+                    <h3 className="text-xl font-semibold text-[#2D2D3A] dark:text-[#F8F5F2] mb-2">
+                      {showPinnedOnly ? 'No Pinned Notes' : isSearching ? 'No Results Found' : 'No Notes Yet'}
+                    </h3>
+                    <p className="text-[#2D2D3A]/60 dark:text-[#F8F5F2]/60">
+                      {showPinnedOnly
+                        ? 'Pin your important notes to access them quickly.'
+                        : isSearching
+                          ? 'Try different keywords or check your spelling.'
+                          : 'Create your first note to get started!'}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
-      )}
-    </>
+      </main>
+
+      <CreateNote
+        isOpen={isOpen}
+        onClose={handleCloseModal}
+        addNote={addNote}
+        currentNote={currentNote}
+        updateNote={updateNote}
+      />
+    </div>
   );
 }

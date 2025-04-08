@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react';
-import { Loader2, Pin } from 'lucide-react';
+import { Loader2, Pin, Edit2, Trash2, FileText } from 'lucide-react';
 import { useAuth } from '@clerk/nextjs';
 import HighlightText from './HighlightText';
 
@@ -8,7 +8,7 @@ const TextCard = ({ title, content, onDelete, onEdit, date, noteId, summary: sav
   const [summary, setSummary] = useState(savedSummary || '');
   const [loading, setLoading] = useState(false);
   const { getToken, isLoaded, isSignedIn } = useAuth();
-  const [summarized, setSummarized] = useState(!!savedSummary)
+  const [summarized, setSummarized] = useState(!!savedSummary);
 
   const handleSummarize = async () => {
     if (!isLoaded || !isSignedIn) {
@@ -19,8 +19,6 @@ const TextCard = ({ title, content, onDelete, onEdit, date, noteId, summary: sav
     setLoading(true);
     try {
       const token = await getToken();
-      console.log("Auth token for summarize:", token ? "Token exists" : "No token");
-
       const response = await fetch('/api/summarize', {
         method: 'POST',
         headers: {
@@ -30,18 +28,14 @@ const TextCard = ({ title, content, onDelete, onEdit, date, noteId, summary: sav
         body: JSON.stringify({ content }),
       });
 
-      console.log("Summarize response status:", response.status);
-
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Error response:", errorData);
         throw new Error(errorData.error || 'Failed to summarize');
       }
 
       const data = await response.json();
       setSummary(data.summary);
 
-      // Save the summary to the database
       const updateResponse = await fetch(`/api/notes/${noteId}`, {
         method: 'PUT',
         headers: {
@@ -62,62 +56,102 @@ const TextCard = ({ title, content, onDelete, onEdit, date, noteId, summary: sav
       console.error("Summarize error:", err.message);
     } finally {
       setLoading(false);
-      setSummarized(true)
+      setSummarized(true);
     }
   };
 
   return (
-    <div className={`relative dark:bg-[#0C1716] w-96 bg-white shadow-sm border border-emerald-700/30 rounded-3xl p-3 pb-6 ${isPinned ? 'border-2 border-emerald-500' : ''}`}>
-      <div className="justify-start mb-3 px-2">
-        <div className="flex justify-between items-center">
-          <h5 className="text-primary dark:text-emerald-400 text-2xl font-semibold">
+    <div
+      className={`relative w-96 bg-[#F8F5F2] dark:bg-[#2D2D3A] shadow-lg border border-[#E5E0D9] dark:border-[#3D3D4A] rounded-xl p-6 transition-all duration-300 hover:shadow-xl ${
+        isPinned ? 'border-2 border-emerald-500 dark:border-[#F8F5F2]' : ''
+      }`}
+    >
+      <div className="space-y-4">
+        <div className="flex justify-between items-start">
+          <h5 className="text-[#2D2D3A] dark:text-[#F8F5F2] text-xl font-semibold pr-8 leading-tight">
             <HighlightText text={title} searchQuery={searchQuery} />
           </h5>
           <button
             onClick={() => onPin(noteId, !isPinned)}
-            className={`p-1 rounded-full ${isPinned ? 'text-emerald-500' : 'text-gray-400 hover:text-emerald-500'}`}
+            className={`p-2 rounded-full hover:bg-[#E5E0D9] dark:hover:bg-[#3D3D4A] transition-colors ${
+              isPinned
+                ? 'text-emerald-500 dark:text-emerald-400'
+                : 'text-[#2D2D3A]/40 dark:text-[#F8F5F2]/40 hover:text-emerald-500 dark:hover:text-emerald-400'
+            }`}
             title={isPinned ? "Unpin note" : "Pin note"}
           >
-            <Pin size={18} fill={isPinned ? "currentColor" : "none"} />
+            <Pin size={20} fill={isPinned ? "currentColor" : "none"} />
           </button>
         </div>
+
         <div className="flex justify-between items-center">
-          <p className="text-sm text-gray-400 dark:text-gray-300">{new Date(date).toLocaleString()}</p>
-          <span className="text-xs px-2 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 rounded-full">
+          <p className="text-sm text-[#2D2D3A]/60 dark:text-[#F8F5F2]/60">
+            {new Date(date).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
+          </p>
+          <span className="text-xs px-3 py-1.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 rounded-full font-medium">
             {category || 'General'}
           </span>
         </div>
-      </div>
-      <div className="p-3 mt-5 border-t border-emerald-700/30 max-h-52 overflow-y-auto">
-        {loading ? (
-          <div className="flex justify-center items-center">
-            <Loader2 className="animate-spin text-emerald-900 dark:text-emerald-400" size={24} />
-            <p className="text-emerald-900 dark:text-emerald-400 font-light ml-2">Summarizing...</p>
+
+        <div className="border-t border-[#E5E0D9] dark:border-[#3D3D4A] pt-4 mt-4">
+          <div className="max-h-48 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-emerald-200 dark:scrollbar-thumb-emerald-800/30 scrollbar-track-transparent">
+            {loading ? (
+              <div className="flex justify-center items-center py-8">
+                <Loader2 className="animate-spin text-emerald-500 dark:text-emerald-400" size={24} />
+                <p className="text-emerald-500 dark:text-emerald-400 font-medium ml-3">Summarizing...</p>
+              </div>
+            ) : (
+              <p className="text-[#2D2D3A]/80 dark:text-[#F8F5F2]/80 leading-relaxed">
+                <HighlightText text={summary || content} searchQuery={searchQuery} />
+              </p>
+            )}
           </div>
-        ) : (
-          <p className="block text-emerald-900 dark:text-emerald-100 leading-normal font-light mb-4 max-w-lg">
-            <HighlightText text={summary || content} searchQuery={searchQuery} />
-          </p>
-        )}
-      </div>
-      <div className='flex mt-3 items-center justify-evenly font-semibold'>
-        <button
-          onClick={onEdit}
-          className='rounded-3xl w-[70px] p-2 text-white bg-emerald-800 hover:bg-emerald-900 dark:bg-emerald-800/40 dark:hover:bg-emerald-800/60'>
-          Edit
-        </button>
-        <button
-          onClick={handleSummarize}
-          disabled={loading || summarized}
-          className={`rounded-3xl w-[120px] p-2 text-white bg-emerald-800 hover:bg-emerald-900 dark:bg-emerald-800/40 dark:hover:bg-emerald-800/60 ${loading || summarized ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
-        >
-          {loading ? <Loader2 className="animate-spin inline-block" size={16} /> : 'Summarize'}
-        </button>
-        <button
-          onClick={onDelete}
-          className='rounded-3xl w-[80px] p-2 text-white bg-emerald-800 hover:bg-emerald-900 dark:bg-emerald-800/40 dark:hover:bg-emerald-800/60'>
-          Delete
-        </button>
+        </div>
+
+        <div className="flex items-center justify-between pt-4 mt-2 border-t border-[#E5E0D9] dark:border-[#3D3D4A]">
+          <div className="flex gap-2">
+            <button
+              onClick={onEdit}
+              className="p-2 text-[#2D2D3A]/70 dark:text-[#F8F5F2]/70 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors rounded-lg hover:bg-[#E5E0D9] dark:hover:bg-[#3D3D4A]"
+              title="Edit note"
+            >
+              <Edit2 size={18} />
+            </button>
+            <button
+              onClick={onDelete}
+              className="p-2 text-[#2D2D3A]/70 dark:text-[#F8F5F2]/70 hover:text-red-500 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-[#E5E0D9] dark:hover:bg-[#3D3D4A]"
+              title="Delete note"
+            >
+              <Trash2 size={18} />
+            </button>
+          </div>
+
+          <button
+            onClick={handleSummarize}
+            disabled={loading || summarized}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              loading || summarized
+                ? 'bg-[#E5E0D9] dark:bg-[#3D3D4A] text-[#2D2D3A]/40 dark:text-[#F8F5F2]/40 cursor-not-allowed'
+                : 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-900/40 cursor-pointer'
+            }`}
+            title={summarized ? "Note already summarized" : "Generate AI summary"}
+          >
+            {loading ? (
+              <Loader2 className="animate-spin" size={16} />
+            ) : (
+              <>
+                <FileText size={16} />
+                {summarized ? 'Summarized' : 'Summarize'}
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );

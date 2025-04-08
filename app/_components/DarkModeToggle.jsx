@@ -13,7 +13,7 @@ const DarkModeToggle = () => {
     <div>
       <button
         onClick={toggleDarkMode}
-        className="h-12 w-12 rounded-lg p-2 hover:bg-foreground "
+        className="h-12 w-12 rounded-lg p-2 hover:bg-slate-500 "
       >
         {/* Sun Icon for Light Mode */}
         <svg
@@ -30,7 +30,7 @@ const DarkModeToggle = () => {
 
         {/* Moon Icon for Dark Mode */}
         <svg
-          className={`fill-slate-900 block ${isDarkMode ? 'block' : 'hidden'}`}
+          className={`fill-lavender block ${isDarkMode ? 'block' : 'hidden'}`}
           fill="currentColor"
           viewBox="0 0 20 20"
         >

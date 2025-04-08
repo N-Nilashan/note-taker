@@ -17,14 +17,14 @@ const Navbar = ({ customButton }) => {
   };
 
   return (
-    <div className='bg-gradient-to-r from-emerald-700 to-emerald-600 dark:from-emerald-800 dark:to-emerald-700 w-full shadow-md'>
+    <div className='bg-[#F8F5F2] dark:bg-[#2D2D3A] w-full border-b border-[#E5E0D9] dark:border-[#3D3D4A] shadow-sm'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex justify-between items-center h-16'>
           <div className='flex items-center'>
             <div className='flex-shrink-0 flex items-center'>
               <div className='ml-3 flex items-center'>
-                <NotebookPen className='h-6 w-6 text-white dark:text-emerald-200 mr-2' />
-                <h2 className='text-white dark:text-emerald-100 text-xl font-bold tracking-tight'>
+                <NotebookPen className='h-6 w-6 text-[#2D2D3A] dark:text-[#F8F5F2] mr-2' />
+                <h2 className='text-[#2D2D3A] dark:text-[#F8F5F2] text-xl font-bold tracking-tight'>
                   AI-Notes
                 </h2>
               </div>
@@ -42,7 +42,7 @@ const Navbar = ({ customButton }) => {
             ) : (
               <Button
                 onClick={handleRedirect}
-                className='ml-4 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-medium transition-all duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30'
+                className='ml-4 px-5 py-2 rounded-lg bg-[#2D2D3A] dark:bg-[#F8F5F2] hover:bg-[#2D2D3A]/90 dark:hover:bg-[#F8F5F2]/90 text-[#F8F5F2] dark:text-[#2D2D3A] font-medium transition-colors'
               >
                 Get Started
               </Button>

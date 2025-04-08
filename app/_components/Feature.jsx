@@ -1,5 +1,5 @@
 'use client'
-import { NotebookPen, CheckCircle, Star, Folder, Search, Lock, Edit } from 'lucide-react'
+import { NotebookPen, CheckCircle, Star, Folder, Search, Lock, Edit, CheckCircle2 } from 'lucide-react'
 import React from 'react'
 import { Button } from '../../components/ui/button';
 import Link from 'next/link';
@@ -24,77 +24,77 @@ const Feature = () => {
     'edit': Edit
   };
 
-  const featureList = [
+  const features = [
     {
-      id: '6',
-      title: 'Write and Save Notes',
-      icon: 'edit',
-      des: 'Effortlessly jot down and store your thoughts, ideas, or important information in a secure, easy-to-use platform for future reference.',
-    },
-
-    {
-      id: '2',
-      title: 'AI Summarization',
-      icon: 'star',
-      des: 'Automatically generate concise summaries of your notes with the power of AI, saving time and enhancing the efficiency of your study sessions.',
+      title: "Write and Save Notes",
+      description: "Effortlessly jot down and store your thoughts, ideas, or important information in a secure, easy-to-use platform for future reference."
     },
     {
-      id: '3',
-      title: 'Categories',
-      icon: 'folder',
-      des: 'Organize your notes into easy-to-navigate categories, making it simpler to manage and locate specific information when needed.',
+      title: "AI Summarization",
+      description: "Automatically generate concise summaries of your notes with the power of AI, saving time and enhancing the efficiency of your study sessions."
     },
     {
-      id: '4',
-      title: 'Find Notes Easily',
-      icon: 'search',
-      des: 'Quickly search through your notes with intuitive search functionality, ensuring that you can access important content in seconds.',
+      title: "Categories",
+      description: "Organize your notes into easy-to-navigate categories, making it simpler to manage and locate specific information when needed."
     },
     {
-      id: '5',
-      title: 'Secure and Private',
-      icon: 'lock',
-      des: 'Rest assured knowing your notes are encrypted and protected, ensuring complete privacy and security for your personal information.',
+      title: "Find Notes Easily",
+      description: "Quickly search through your notes with intuitive search functionality, ensuring that you can access important content in seconds."
     },
     {
-      id: '1',
-      title: 'Dark Mode',
-      icon: 'check-circle',
-      des: 'Switch to a visually comfortable dark theme to reduce eye strain and improve readability in low light environments.',
+      title: "Secure and Private",
+      description: "Rest assured knowing your notes are encrypted and protected, ensuring complete privacy and security for your personal information."
     },
-  ];
+    {
+      title: "Dark Mode",
+      description: "Switch to a visually comfortable dark theme to reduce eye strain and improve readability in low light environments."
+    }
+  ]
 
   return (
-    <>
-      <div>
-        <h2 className='text-primary font-bold dark:text-secondary text-[40px] text-center'>Key Features of AI-Notes App</h2>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-        {featureList.map((feature) => {
-          const IconComponent = iconComponents[feature.icon];
-          return (
+    <div id="features" className="py-24 bg-[#F8F5F2] dark:bg-[#2D2D3A]">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-[#2D2D3A] dark:text-[#F8F5F2] mb-4">
+            Powerful Features
+          </h2>
+          <p className="text-lg text-[#2D2D3A]/70 dark:text-[#F8F5F2]/70 max-w-2xl mx-auto">
+            Experience the future of note-taking with our cutting-edge features designed to enhance your productivity
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {features.map((feature, index) => (
             <div
-              key={feature.id}
-              className="block p-6 bg-white border border-gray-200 rounded-3xl shadow-sm hover:bg-gray-100 dark:bg-bgDark dark:border-emerald-900/20 dark:hover:bg-emerald-900/20"
+              key={index}
+              className="p-6 rounded-lg bg-white dark:bg-[#3D3D4A] border border-[#E5E0D9] dark:border-[#4D4D5A] hover:shadow-lg transition-all"
             >
-              <h5 className="mb-2 flex items-center gap-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                {IconComponent && <IconComponent />}
-                {feature.title}
-              </h5>
-              <p className="font-normal text-gray-700 dark:text-gray-400">
-                {feature.des}
-              </p>
+              <div className="flex items-start gap-4">
+                <CheckCircle2 className="w-6 h-6 text-[#2D2D3A] dark:text-[#F8F5F2] flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="text-xl font-semibold text-[#2D2D3A] dark:text-[#F8F5F2] mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-[#2D2D3A]/70 dark:text-[#F8F5F2]/70">
+                    {feature.description}
+                  </p>
+                </div>
+              </div>
             </div>
-          );
-        })}
+          ))}
+        </div>
+
+        <div className="text-center mt-16">
+          <Link href="/dashboard">
+            <Button
+              className="bg-[#2D2D3A] dark:bg-[#F8F5F2] text-[#F8F5F2] dark:text-[#2D2D3A] hover:bg-[#3D3D4A] dark:hover:bg-[#E5E0D9] transition-colors px-6 py-6 text-lg font-bold rounded-full"
+            >
+              Get Started
+            </Button>
+          </Link>
+        </div>
       </div>
-      <div  className='text-primary dark:text-secondary font-bold text-center'>
-       <h1 className='text-[40px]'>Start Using AI Notes Today</h1>
-       <Link href="/sign-up">
-       <Button onClick={handleRedirect} className='mt-7 px-6 py-6 dark:bg-dbtn bg-primary rounded-full font-bold text-white hover:bg-secondary dark:hover:bg-secondary' >Get Started</Button>
-       </Link>
-      </div>
-    </>
+    </div>
   )
 }
 
